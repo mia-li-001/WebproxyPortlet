@@ -52,6 +52,7 @@ public class HttpContentServiceImplTest {
 
 		when(request.getPreferences()).thenReturn(preferences);
   		when(preferences.getValue(GenericContentRequestImpl.CONTENT_LOCATION_PREFERENCE, null)).thenReturn("http://somewhere.com/path/page.html");
+		when(request.getParameter("proxy.url")).thenReturn(null);  
 
 	}
 
