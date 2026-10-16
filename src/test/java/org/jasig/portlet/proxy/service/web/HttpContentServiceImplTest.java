@@ -58,9 +58,7 @@ public class HttpContentServiceImplTest {
 
 	@Test
 	public void testPostFormNoParams() {
-		when(request.getParameter(HttpContentServiceImpl.IS_FORM_PARAM)).thenReturn("true");
-		when(request.getParameter(HttpContentServiceImpl.FORM_METHOD_PARAM)).thenReturn("POST");
-		when(processor.process(any(String.class), any(PortletRequest.class))).thenReturn("http://somewhere.com/path/page.html");
+		setupFormRequestStubs("POST");
 		HttpContentRequestImpl proxyRequest = new HttpContentRequestImpl(request, processor);
 
 		final HttpUriRequest httpRequest = service.getHttpRequest(proxyRequest, request);
@@ -75,9 +73,7 @@ public class HttpContentServiceImplTest {
 		params.put("param1", new String[]{"value1"});
 		params.put("param2", new String[]{"value3", "value4"});
 
-		when(request.getParameter(HttpContentServiceImpl.IS_FORM_PARAM)).thenReturn("true");
-		when(request.getParameter(HttpContentServiceImpl.FORM_METHOD_PARAM)).thenReturn("GET");
-		when(processor.process(any(String.class), any(PortletRequest.class))).thenReturn("http://somewhere.com/path/page.html");
+		setupFormRequestStubs("GET");
 		HttpContentRequestImpl proxyRequest = new HttpContentRequestImpl(request, processor);
 
 		final HttpUriRequest httpRequest = service.getHttpRequest(proxyRequest, request);
@@ -88,9 +84,7 @@ public class HttpContentServiceImplTest {
 
 	@Test
 	public void testGetFormNoParams() {
-		when(request.getParameter(HttpContentServiceImpl.IS_FORM_PARAM)).thenReturn("true");
-		when(request.getParameter(HttpContentServiceImpl.FORM_METHOD_PARAM)).thenReturn("GET");
-		when(processor.process(any(String.class), any(PortletRequest.class))).thenReturn("http://somewhere.com/path/page.html");
+		setupFormRequestStubs("GET");
 		HttpContentRequestImpl proxyRequest = new HttpContentRequestImpl(request, processor);
 
 		final HttpUriRequest httpRequest = service.getHttpRequest(proxyRequest, request);
@@ -112,6 +106,13 @@ public class HttpContentServiceImplTest {
 		assertEquals("http://somewhere.com/path/page.html", httpRequest.getURI().toString());
 
 	}
+
+	private void setupFormRequestStubs(String method) {
+		when(request.getParameter(HttpContentServiceImpl.IS_FORM_PARAM)).thenReturn("true");
+		when(request.getParameter(HttpContentServiceImpl.FORM_METHOD_PARAM)).thenReturn(method);
+		when(processor.process(any(String.class), any(PortletRequest.class))).thenReturn("http://somewhere.com/path/page.html");
+	}
+
 
 
 }
